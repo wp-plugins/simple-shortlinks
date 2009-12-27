@@ -98,6 +98,6 @@ function miqro_shortlink_html() {
  */
 function miqro_get_the_shortlink($pid) {
     $pid = (int) $pid;
-    return user_trailingslashit(get_bloginfo('url', 'display'))."?p=$pid";
+    return trailingslashit(get_bloginfo('url', 'display'))."?p=$pid";
 }
 ?>
