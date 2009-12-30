@@ -2,8 +2,8 @@
 Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny
 Requires at least: 2.5
-Tested up to: 2.9
-Stable tag: 1.1
+Tested up to: 2.9.1
+Stable tag: 1.2
 
 Automatically advertise shortlinks using WordPress native ID forwarding.
 
@@ -63,10 +63,10 @@ The template tag is customizable.
 == Changelog ==
 
 = 1.2 =
-* released...
+* Minor bug fix, released 29 December 2009
 * Always include a slash before ?p=
 * FAQ Added
-* WordPress 2.9.1 tested.
+* WordPress 2.9.1-RC1 tested.
 
 = 1.1 =
 * Added a template tag, released 26 December 2009
