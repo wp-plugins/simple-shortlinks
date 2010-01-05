@@ -1,7 +1,7 @@
 === Simple Short Links ===
 Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny
-Requires at least: 2.5
+Requires at least: 2.6
 Tested up to: 2.9.1
 Stable tag: 1.2
 
@@ -21,7 +21,7 @@ A template tag enables you to display a human-readable link in addition to the a
 
 Simple Short Links was designed to do this with no frills, and with an eye on eventually incorporating some or all of its basic functionality into the WordPress core. One benefit of the no-frills system is that you will never worry about the forwarding service itself, which is already built in to WordPress. This plugin simply reveals hidden short URLs that already work on your blog.
 
-One disadvantage of this bare-bone simplicity is there will be no short links for tags, categories, or any other object that's not stored in the WordPress posts table.
+One disadvantage of this bare-bone simplicity is there will be no short links for tags or external URLs.
 
 == Installation ==
 
@@ -49,7 +49,7 @@ That link will forward to a specific attachment from a December 2009 article.  I
 
 Short Links are extra URLs that get forwarded to the normal URLs.  The existing URLs stay the same.
 
-This does work for pages and posts, yes.  This particular plugin does not make short links for tags or categories.
+This does work for pages, posts, and categories, yes.  This particular plugin does not make short links for tags.
 
 
 = Does it take the header as the description? =
@@ -61,6 +61,11 @@ The template tag is customizable.
 
 
 == Changelog ==
+
+= 1.3 =
+* New features, released ...
+* Added short link support for cateogries.
+* WordPress minimum raised to 2.6 from 2.5.
 
 = 1.2 =
 * Minor bug fix, released 29 December 2009
@@ -94,12 +99,47 @@ function the_shortlink($text = '', $title = '');
 
 `
 
+
 If you use that template tag at all, you should also add this contingency to your theme's functions.php file:
 
 `
 if (!function_exists('the_shortlink')) {
     function the_shortlink($a = '', $b = '') {
         return; //Just define this function in case its plugin is ever missing.
+    }
+}
+
+`
+
+
+A second, similar tag is now available in case you need to display a self-referring short link on a category page.
+
+`
+/**
+ * Template Tag for Displaying the Short Link for a Category
+ *
+ * Should be called from outside "The Loop"
+ *
+ * Call like <? the_single_shortlink(__('Shortlinkage FTW')); ?>
+ *
+ * @since 1.3
+ * @param string $text Optional The link text or HTML to be displayed.  Defaults to 'This is the short link.'
+ * @param string $title Optional The tooltip for the link.  Must be sanitized.  Defaults to the sanitized category name.
+ */
+function the_single_shortlink($text = '', $title = '');
+`
+
+
+There are some situations where you might not need to have short links.  For example, unlike post and attachment URLs, it is common for
+blogs that have only a few page type URLs to have relatively short page slugs already.  You could then safely disable
+the short link headers for all page objects by adding this code to your theme's functions.php file:
+
+`
+add_action('wp', 'shortlink_nopages', 9, 0);
+function shortlink_nopages() {
+    if (is_page()) {
+        remove_action('wp', 'miqro_shortlink_http', 10, 0);
+        remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
     }
 }
 
