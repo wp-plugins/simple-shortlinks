@@ -186,8 +186,10 @@ function miqro_get_the_shortlink($pid, $type='post') {
  * @return string The param unmodified.
  */
 function miqro_shortlink_unhook($redirect_url) {
-    if (0 != strlen($redirect_url))
+    if (0 != strlen($redirect_url)) {
         remove_action('template_redirect', 'miqro_shortlink_http', 11, 0);
+        remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
+    }
 
     return $redirect_url;
 }

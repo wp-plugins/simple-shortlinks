@@ -135,12 +135,9 @@ blogs that have only a few page type URLs to have relatively short page slugs al
 the short link headers for all page objects by adding this code to your theme's functions.php file:
 
 `
-add_action('wp', 'shortlink_nopages', 9, 0);
+if (function_exists('miqro_shortlink_unhook')) add_action('wp', 'shortlink_nopages', 10, 0);
 function shortlink_nopages() {
-    if (is_page()) {
-        remove_action('wp', 'miqro_shortlink_http', 10, 0);
-        remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
-    }
+    if (is_page()) miqro_shortlink_unhook('yes');
 }
 
 `
