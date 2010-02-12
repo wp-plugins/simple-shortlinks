@@ -94,7 +94,7 @@ function the_single_shortlink($text = '', $title = '') {
     }
     
     $id = $wp_query->get_queried_object_id();
-    if($id > 0) {
+    if ($id > 0) {
         $shortlink = miqro_get_the_shortlink($id, $type);
         echo "<a rel='shortlink' href='$shortlink' title='$title'>$text</a>";
     }
@@ -125,7 +125,7 @@ function miqro_shortlink_http() {
     }
 
     $id = $wp_query->get_queried_object_id();
-    if($id > 0) header('Link: <'.miqro_get_the_shortlink($id, $type).'>; rel=shortlink', FALSE);
+    if ($id > 0) header('Link: <'.miqro_get_the_shortlink($id, $type).'>; rel=shortlink', FALSE);
 }
 
 /**
@@ -183,6 +183,7 @@ function miqro_get_the_shortlink($pid, $type='post') {
 /**
  * Disable shortlinks when redirecting.
  *
+ * @since 1.3
  * @param string $redirect_url The corrected URL provided by redirect_canonical().
  * @return string The param unmodified.
  */
