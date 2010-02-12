@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Simple Short Links
  *
- * Description: Use WordPress native ID forwarding for HTTP and HTML shortlinks.
+ * Description: Use WordPress native shortlinks on your blog's domain.
  *
  * This plugin does not make any permanent changes.
  *
@@ -10,8 +10,8 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.2
- * @copyright Copyright © 2009 by Robert Chapin
+ * @version: 1.3
+ * @copyright Copyright © 2009-2010 by Robert Chapin
  * @license GPL
  *
  * This program is free software: you can redistribute it and/or modify
@@ -33,6 +33,7 @@
 add_action('template_redirect', 'miqro_shortlink_http', 11, 0);
 add_action('wp_head', 'miqro_shortlink_html', 10, 0);
 add_filter('redirect_canonical', 'miqro_shortlink_unhook', 20, 1); //see wp-includes/canonical.php
+
 
 /* Template Functions */
 
@@ -113,7 +114,7 @@ function miqro_shortlink_http() {
 
     if (is_singular()) {
         $type = 'post';
-    /*  Tag GUIDs are not supported.  See http://core.trac.wordpress.org/ticket/11711
+    /*
     } elseif (is_tag()) {
         $type = 'tag';
     */
@@ -138,7 +139,7 @@ function miqro_shortlink_html() {
 
     if (is_singular()) {
         $type = 'post';
-    /*  Tag GUIDs are not supported.  See http://core.trac.wordpress.org/ticket/11711
+    /*
     } elseif (is_tag()) {
         $type = 'tag';
     */
@@ -167,7 +168,7 @@ function miqro_get_the_shortlink($pid, $type='post') {
     case 'cat':
         $query = "?cat=$pid";
         break;
-    /*  Tag GUIDs are not supported.  See http://core.trac.wordpress.org/ticket/11711
+    /*
     case 'tag':
         $query = "?tag_id=$pid";
         break;
