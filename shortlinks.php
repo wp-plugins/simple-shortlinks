@@ -30,9 +30,8 @@
  
 /* Plugin Bootup */
 
-add_action('template_redirect', 'miqro_shortlink_http', 11, 0);
+add_action('template_redirect', 'miqro_shortlink_http', 11, 0); //see wp-includes/template-loader.php  Priority must be > 10 to avoid canonical redirection.
 add_action('wp_head', 'miqro_shortlink_html', 10, 0);
-add_filter('redirect_canonical', 'miqro_shortlink_unhook', 20, 1); //see wp-includes/canonical.php
 
 
 /* Template Functions */
@@ -181,18 +180,12 @@ function miqro_get_the_shortlink($pid, $type='post') {
 }
 
 /**
- * Disable shortlinks when redirecting.
+ * Disable shortlinks for this request.
  *
  * @since 1.3
- * @param string $redirect_url The corrected URL provided by redirect_canonical().
- * @return string The param unmodified.
  */
-function miqro_shortlink_unhook($redirect_url) {
-    if (0 != strlen($redirect_url)) {
-        remove_action('template_redirect', 'miqro_shortlink_http', 11, 0);
-        remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
-    }
-
-    return $redirect_url;
+function miqro_shortlink_unhook() {
+    remove_action('template_redirect', 'miqro_shortlink_http', 11, 0);
+    remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
 }
 ?>

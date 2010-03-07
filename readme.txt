@@ -107,7 +107,7 @@ If you use that template tag at all, you should also add this contingency to you
 
 `
 if (!function_exists('the_shortlink')) {
-    function the_shortlink($a = '', $b = '') {
+    function the_shortlink() {
         return; //Just define this function in case its plugin is ever missing.
     }
 }
@@ -138,9 +138,11 @@ blogs that have only a few page-type URLs to have relatively short page slugs al
 the short link headers for all page objects by adding this code to your theme's functions.php file:
 
 `
-if (function_exists('miqro_shortlink_unhook')) add_action('wp', 'shortlink_nopages', 10, 0);
+if (function_exists('miqro_shortlink_unhook'))
+    add_action('wp', 'shortlink_nopages', 10, 0);
+
 function shortlink_nopages() {
-    if (is_page()) miqro_shortlink_unhook('yes');
+    if (is_page()) miqro_shortlink_unhook();
 }
 
 `
