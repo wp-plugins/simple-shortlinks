@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.3
+ * @version: 1.4
  * @copyright Copyright © 2009-2010 by Robert Chapin
  * @license GPL
  *
@@ -30,8 +30,12 @@
  
 /* Plugin Bootup */
 
-add_action('template_redirect', 'miqro_shortlink_http', 11, 0); //see wp-includes/template-loader.php  Priority must be > 10 to avoid canonical redirection.
-add_action('wp_head', 'miqro_shortlink_html', 10, 0);
+if (version_compare(get_bloginfo('version'), '3.0-alpha', '<')) {
+    add_action('template_redirect', 'miqro_shortlink_http', 11, 0); //see wp-includes/template-loader.php  Priority must be > 10 to avoid canonical redirection.
+    add_action('wp_head', 'miqro_shortlink_html', 10, 0);
+} else {
+    add_filter('pre_get_shortlink', 'miqro_shortlink_query', 10, 3); //see wp-includes/link-template.php
+}
 
 
 /* Template Functions */
@@ -69,34 +73,28 @@ function the_shortlink($text = '', $title = '') {
 function the_single_shortlink($text = '', $title = '') {
     global $wp_query;
 
-    if (strlen($text) == 0) $text = 'This is the short link.';
+    if (empty($text)) $text = 'This is the short link.';
     
     if (is_category()) {
 
-        $type = 'cat';
-        if (strlen($title) == 0) $title = esc_attr(single_cat_title('', FALSE));
+        if (empty($title)) $title = esc_attr(single_cat_title('', FALSE));
 
     /*  Tag GUIDs are not supported.  See http://core.trac.wordpress.org/ticket/11711
     } elseif (is_tag()) {
-        $type = 'tag';
         if (strlen($title) == 0) $title = esc_attr(single_tag_title('', FALSE));
     */
     
     } elseif (is_singular()) {
 
-        $type = 'post';
-        if (strlen($title) == 0) $title = esc_attr(single_post_title('', FALSE));
+        if (empty($title)) $title = esc_attr(single_post_title('', FALSE));
 
     } else {
 
         return;
     }
     
-    $id = $wp_query->get_queried_object_id();
-    if ($id > 0) {
-        $shortlink = miqro_get_the_shortlink($id, $type);
-        echo "<a rel='shortlink' href='$shortlink' title='$title'>$text</a>";
-    }
+    $url = miqro_shortlink_query(0, 0, 'query');
+    if (FALSE !== $url) echo "<a rel='shortlink' href='$url' title='$title'>$text</a>";
 }
 
 
@@ -106,50 +104,58 @@ function the_single_shortlink($text = '', $title = '') {
  * Output a shortlink HTTP header.
  */
 function miqro_shortlink_http() {
-    global $wp_query;
-
-    // Check if post has a shortlink, but avoid feeds, redirects, etc.
-    if (is_feed() or is_front_page() or is_trackback() or headers_sent()) return;
-
-    if (is_singular()) {
-        $type = 'post';
-    /*
-    } elseif (is_tag()) {
-        $type = 'tag';
-    */
-    } elseif (is_category()) {
-        $type = 'cat';
-    } else {
-        return;
-    }
-
-    $id = $wp_query->get_queried_object_id();
-    if ($id > 0) header('Link: <'.miqro_get_the_shortlink($id, $type).'>; rel=shortlink', FALSE);
+    if (headers_sent()) return;
+    $url = miqro_shortlink_query(0, 0, 'query');
+    if (FALSE !== $url) header('Link: <'.$url.'>; rel=shortlink', FALSE);
 }
 
 /**
  * Output a shortlink XHTML LINK element.
  */
 function miqro_shortlink_html() {
+    $url = miqro_shortlink_query(0, 0, 'query');
+    if (FALSE !== $url) echo "<link rel='shortlink' href='".$url."' />\n";
+}
+
+/**
+ * Determines type of request, then calls the shortlink generator.
+ *
+ * @since 1.4
+ * @param bool $null
+ * @param int $id The post id, if $context is 'post'
+ * @param string $context 'query' if unknown, otherwise 'post', 'media', 'blog' per wp_get_shortlink()
+ * @return string|bool The shortlink, if available, otherwise FALSE.
+ */
+function miqro_shortlink_query($null, $id, $context) {
     global $wp_query;
 
-    // Just check if post has a shortlink.
-    if (is_front_page()) return;
+    if ('query' == $context) {
+        // Check if post has a shortlink, but avoid feeds, redirects, etc.
+        if (is_feed() or is_front_page() or is_trackback()) return FALSE;
 
-    if (is_singular()) {
+        if (is_singular()) {
+            $type = 'post';
+        /*
+        } elseif (is_tag()) {
+            $type = 'tag';
+        */
+        } elseif (is_category()) {
+            $type = 'cat';
+        } else {
+            return FALSE;
+        }
+        $id = $wp_query->get_queried_object_id();
+    } elseif ('post' == $context or 'media' == $context) {
         $type = 'post';
-    /*
-    } elseif (is_tag()) {
-        $type = 'tag';
-    */
-    } elseif (is_category()) {
-        $type = 'cat';
     } else {
-        return;
+        return FALSE;
     }
 
-    $id = $wp_query->get_queried_object_id();
-    if ($id > 0) echo '<link rel="shortlink" href="'.miqro_get_the_shortlink($id, $type).'" />';
+    if ($id <= 0) {
+        return FALSE;
+    } else {
+        return miqro_get_the_shortlink($id, $type);
+    }
 }
 
 /**
@@ -186,6 +192,8 @@ function miqro_get_the_shortlink($pid, $type='post') {
  */
 function miqro_shortlink_unhook() {
     remove_action('template_redirect', 'miqro_shortlink_http', 11, 0);
+    remove_action('template_redirect', 'wp_shortlink_header', 11, 0);
     remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
+    remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
 }
 ?>

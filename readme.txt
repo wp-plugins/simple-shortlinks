@@ -3,7 +3,7 @@ Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny, micro, shortening
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 1.3
+Stable tag: 1.4
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
 
@@ -63,6 +63,11 @@ The template tag is customizable.
 
 
 == Changelog ==
+
+= 1.4 =
+* Alpha compatibility, released 10 March 2010
+* Fixed cosmetic linefeed issue in XHTML headers.
+* Header hooks updated for yesterday's core changes.
 
 = 1.3 =
 * New features, released 11 February 2010
