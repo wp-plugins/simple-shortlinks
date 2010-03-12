@@ -10,7 +10,7 @@
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.4
+ * @version: 1.4.1
  * @copyright Copyright © 2009-2010 by Robert Chapin
  * @license GPL
  *
@@ -40,6 +40,7 @@ if (version_compare(get_bloginfo('version'), '3.0-alpha', '<')) {
 
 /* Template Functions */
 
+if (!function_exists('the_shortlink')) {
 /**
  * Template Tag for Displaying the Short Link for a Post
  *
@@ -57,6 +58,7 @@ function the_shortlink($text = '', $title = '') {
     if (strlen($title) == 0) $title = the_title_attribute(array('echo' => FALSE));
     $shortlink = miqro_get_the_shortlink($post->ID);
     echo "<a rel='shortlink' href='$shortlink' title='$title'>$text</a>";
+}
 }
 
 /**

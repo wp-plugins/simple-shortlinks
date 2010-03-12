@@ -3,7 +3,7 @@ Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny, micro, shortening
 Requires at least: 2.6
 Tested up to: 3.0
-Stable tag: 1.4
+Stable tag: 1.4.1
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
 
@@ -64,6 +64,10 @@ The template tag is customizable.
 
 == Changelog ==
 
+= 1.4.1 =
+* Alpha compatibility, released 12 March 2010
+* Template tag the_shortlink() is now in core. :)
+
 = 1.4 =
 * Alpha compatibility, released 10 March 2010
 * Fixed cosmetic linefeed issue in XHTML headers.
@@ -89,7 +93,7 @@ The template tag is customizable.
 
 == Theme ==
 
-Here is a basic reference for the template functions provided by Simple Short Links.
+Here is a basic reference for the template functions provided by Simple Short Links.  WordPress 3.0+ users, see also wp-includes/link-template.php for more details about the_shortlink().
 
 `
 /**
@@ -104,18 +108,6 @@ Here is a basic reference for the template functions provided by Simple Short Li
  * @param string $title Optional The tooltip for the link.  Must be sanitized.  Defaults to the sanitized post title.
  */
 function the_shortlink($text = '', $title = '');
-
-`
-
-
-If you use that template tag at all, you should also add this contingency to your theme's functions.php file:
-
-`
-if (!function_exists('the_shortlink')) {
-    function the_shortlink() {
-        return; //Just define this function in case its plugin is ever missing.
-    }
-}
 
 `
 
