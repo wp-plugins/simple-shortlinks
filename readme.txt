@@ -2,7 +2,7 @@
 Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny, micro, shortening
 Requires at least: 2.6
-Tested up to: 3.0
+Tested up to: 3.0.6
 Stable tag: 1.4.1
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
