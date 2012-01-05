@@ -1,9 +1,9 @@
 === Simple Short Links ===
 Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny, micro, shortening
-Requires at least: 2.6
-Tested up to: 3.1.4
-Stable tag: 1.4.1
+Requires at least: 3.0
+Tested up to: 3.2.1
+Stable tag: 1.5
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
 
@@ -22,6 +22,12 @@ A template tag enables you to display a human-readable link in addition to the a
 Simple Short Links was designed to do this with no frills, and with an eye on eventually incorporating some or all of its basic functionality into the WordPress core. One benefit of the no-frills system is that you will never worry about the forwarding service itself, which is already built in to WordPress. This plugin simply reveals hidden short URLs that already work on your blog.
 
 One disadvantage of this bare-bone simplicity is there will be no short links for tags or external URLs.
+
+= Older Versions =
+
+WordPress 2.6 through 2.9.2, please use Simple Short Links v1.4.1.
+
+WordPress 2.5, please use Simple Short Links v1.2.
 
 == Installation ==
 
@@ -63,6 +69,11 @@ The template tag is customizable.
 
 
 == Changelog ==
+
+= 1.5 =
+* Minor updates, released 5 january 2012.
+* WordPress minimum raised to 3.0 from 2.6.
+* WordPress 3.2.1 tested.
 
 = 1.4.1 =
 * Alpha compatibility, released 12 March 2010

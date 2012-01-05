@@ -6,12 +6,12 @@
  *
  * This plugin does not make any permanent changes.
  *
- * Plugin URI: http://blogyul.miqrogroove.com/about/
+ * Plugin URI: http://www.miqrogroove.com/pro/software/
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.4.1
- * @copyright Copyright © 2009-2010 by Robert Chapin
+ * @version: 1.5
+ * @copyright Copyright © 2009-2012 by Robert Chapin
  * @license GPL
  *
  * This program is free software: you can redistribute it and/or modify
@@ -30,36 +30,15 @@
  
 /* Plugin Bootup */
 
-if (version_compare(get_bloginfo('version'), '3.0-alpha', '<')) {
-    add_action('template_redirect', 'miqro_shortlink_http', 11, 0); //see wp-includes/template-loader.php  Priority must be > 10 to avoid canonical redirection.
-    add_action('wp_head', 'miqro_shortlink_html', 10, 0);
-} else {
-    add_filter('pre_get_shortlink', 'miqro_shortlink_query', 10, 3); //see wp-includes/link-template.php
+if (!function_exists('get_bloginfo')) {
+    header('HTTP/1.0 403 Forbidden');
+    exit("Not allowed to run this file directly.");
 }
+
+add_filter('pre_get_shortlink', 'miqro_shortlink_query', 10, 3); //see wp-includes/link-template.php
 
 
 /* Template Functions */
-
-if (!function_exists('the_shortlink')) {
-/**
- * Template Tag for Displaying the Short Link for a Post
- *
- * Must be called from inside "The Loop"
- *
- * Call like the_shortlink(__('Shortlinkage FTW'))
- *
- * @since 1.1
- * @param string $text Optional The link text or HTML to be displayed.  Defaults to 'This is the short link.'
- * @param string $title Optional The tooltip for the link.  Must be sanitized.  Defaults to the sanitized post title.
- */
-function the_shortlink($text = '', $title = '') {
-    global $post;
-    if (strlen($text) == 0) $text = 'This is the short link.';
-    if (strlen($title) == 0) $title = the_title_attribute(array('echo' => FALSE));
-    $shortlink = miqro_get_the_shortlink($post->ID);
-    echo "<a rel='shortlink' href='$shortlink' title='$title'>$text</a>";
-}
-}
 
 /**
  * Template Tag for Displaying the Short Link for a Category
@@ -81,17 +60,14 @@ function the_single_shortlink($text = '', $title = '') {
 
         if (empty($title)) $title = esc_attr(single_cat_title('', FALSE));
 
-    /*  Tag GUIDs are not supported.  See http://core.trac.wordpress.org/ticket/11711
-    } elseif (is_tag()) {
-        if (strlen($title) == 0) $title = esc_attr(single_tag_title('', FALSE));
-    */
-    
     } elseif (is_singular()) {
 
         if (empty($title)) $title = esc_attr(single_post_title('', FALSE));
 
     } else {
 
+        //  Tag GUIDs are not supported.  See http://core.trac.wordpress.org/ticket/11711
+    
         return;
     }
     
@@ -101,23 +77,6 @@ function the_single_shortlink($text = '', $title = '') {
 
 
 /* Plugin Functions */
-
-/**
- * Output a shortlink HTTP header.
- */
-function miqro_shortlink_http() {
-    if (headers_sent()) return;
-    $url = miqro_shortlink_query(0, 0, 'query');
-    if (FALSE !== $url) header('Link: <'.$url.'>; rel=shortlink', FALSE);
-}
-
-/**
- * Output a shortlink XHTML LINK element.
- */
-function miqro_shortlink_html() {
-    $url = miqro_shortlink_query(0, 0, 'query');
-    if (FALSE !== $url) echo "<link rel='shortlink' href='".$url."' />\n";
-}
 
 /**
  * Determines type of request, then calls the shortlink generator.
@@ -137,10 +96,6 @@ function miqro_shortlink_query($null, $id, $context) {
 
         if (is_singular()) {
             $type = 'post';
-        /*
-        } elseif (is_tag()) {
-            $type = 'tag';
-        */
         } elseif (is_category()) {
             $type = 'cat';
         } else {
@@ -163,8 +118,6 @@ function miqro_shortlink_query($null, $id, $context) {
 /**
  * Create a shortlink given an ID from the posts table.
  *
- * This is sometimes different from the GUID.
- *
  * @param int $pid ID number from the posts table.
  * @param string $type Optional.  Should be 'cat' or 'post' if specified.
  * @return string The short link absolute URL.
@@ -175,11 +128,6 @@ function miqro_get_the_shortlink($pid, $type='post') {
     case 'cat':
         $query = "?cat=$pid";
         break;
-    /*
-    case 'tag':
-        $query = "?tag_id=$pid";
-        break;
-    */
     case 'post':
     default:
         $query = "?p=$pid";
@@ -193,9 +141,7 @@ function miqro_get_the_shortlink($pid, $type='post') {
  * @since 1.3
  */
 function miqro_shortlink_unhook() {
-    remove_action('template_redirect', 'miqro_shortlink_http', 11, 0);
-    remove_action('template_redirect', 'wp_shortlink_header', 11, 0);
-    remove_action('wp_head', 'miqro_shortlink_html', 10, 0);
+    remove_action('template_redirect', 'wp_shortlink_header', 11, 0); //see wp-includes/default-filters.php
     remove_action('wp_head', 'wp_shortlink_wp_head', 10, 0);
 }
 ?>
