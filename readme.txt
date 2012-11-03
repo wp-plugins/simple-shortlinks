@@ -3,7 +3,7 @@ Contributors: miqrogroove
 Tags: shortlinks, short, links, url, tiny, micro, shortening
 Requires at least: 3.0
 Tested up to: 3.4.2
-Stable tag: 1.5
+Stable tag: 1.6
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
 
@@ -34,9 +34,9 @@ WordPress 2.5, please use Simple Short Links v1.2.
 1. Upload the `simple-shortlinks` directory to your `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
-This is a zero-configuration plugin.  There are no settings.
+The plugin is fully functional at activation.  A settings page is included for advanced configuration.
 
-Deactivation removes everything except the files you uploaded.  There is no "uninstall" necessary.
+Settings will be preserved during deactivation.  An "uninstall" script is included, which will automatically delete the settings data if you click the Delete on the Plugins screen.
 
 == Frequently Asked Questions ==
 
@@ -69,6 +69,13 @@ The template tag is customizable.
 
 
 == Changelog ==
+
+= 1.6 =
+* New features, released 3 November 2012.
+* Added a settings page for advanced configuration.
+* Links can be slightly shorter in some cases.
+* Links can be disabled by content type.
+* Either of the header types can be disabled.
 
 = 1.5 =
 * Minor updates, released 5 January 2012.
@@ -143,17 +150,3 @@ A second, similar tag is now available in case you need to display a self-referr
 function the_single_shortlink($text = '', $title = '');
 `
 
-
-There are some situations where you might not need to have short links.  For example, unlike post and attachment URLs, it is common for
-blogs that have only a few page-type URLs to have relatively short page slugs already.  You could then safely disable
-the short link headers for all page objects by adding this code to your theme's functions.php file:
-
-`
-if (function_exists('miqro_shortlink_unhook'))
-    add_action('wp', 'shortlink_nopages', 10, 0);
-
-function shortlink_nopages() {
-    if (is_page()) miqro_shortlink_unhook();
-}
-
-`
