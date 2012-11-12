@@ -4,13 +4,18 @@
  *
  * Description: Use WordPress native shortlinks on your blog's domain.
  *
- * This plugin does not make any permanent changes.
+ * This plugin makes the following changes to your WordPress installation:
+ *   1 database item named 'miqro_shortlinks' added to the options table.
+ *
+ * The included uninstall.php script automatically removes all changes
+ * if the plugin is uninstalled by clicking the Delete link in the
+ * plugins administration page.
  *
  * Plugin URI: http://www.miqrogroove.com/pro/software/
  * Author URI: http://www.miqrogroove.com/
  *
  * @author: Robert Chapin (miqrogroove)
- * @version: 1.6
+ * @version: 1.6.1 beta
  * @copyright Copyright © 2009-2012 by Robert Chapin
  * @license GPL
  *
@@ -105,17 +110,23 @@ function miqro_shortlink_query($null, $id, $context) {
             return FALSE;
         }
         $id = $wp_query->get_queried_object_id();
-    } elseif ('post' == $context or 'media' == $context) {
+    } elseif ('post' == $context) {
+        $type = 'post';
+        if (0 == $id) {
+            $post = get_post();
+            if (isset($post->ID)) {
+                $id = $post->ID;
+            }
+        }
+    } elseif ('media' == $context) {
         $type = 'post';
     } else {
         return FALSE;
     }
 
-    if ($id <= 0) {
-        return FALSE;
-    } else {
-        return miqro_get_the_shortlink($id, $type);
-    }
+    if ($id <= 0) return FALSE;
+
+    return miqro_get_the_shortlink($id, $type);
 }
 
 /**
@@ -262,7 +273,7 @@ function miqro_shortlink_www_option_html() {
     echo "<input name='miqro_shortlinks[remove_www]' type='checkbox' value='true' $checked />";
     $site = parse_url(home_url());
     if (substr($site['host'], 0, 4) == 'www.') {
-        echo ' ..... Short links like ', str_replace('//www.', '//', home_url('/?p=1')), ' instead of ', home_url('/?p=1');
+        echo ' ..... Short links like <code>', str_replace('//www.', '//', home_url('/?p=1')), '</code> instead of <code>', home_url('/?p=1'), '</code>';
         echo '<br />Take care with this setting to ensure it will not cause multiple redirects or canonicalization issues for your site.';
     } else {
         echo ' ..... This setting only applies to sites with "www" in the domain name.';
@@ -282,8 +293,8 @@ function miqro_shortlink_slash_option_html() {
         $checked = "";
     }
     echo "<input name='miqro_shortlinks[remove_slash]' type='checkbox' value='true' $checked />";
-    echo ' ..... Short links like ', untrailingslashit(home_url('/')), '?p=1 instead of ', home_url('?p=1');
-    $site = parse_url(home_url());
+    echo ' ..... Short links like <code>', untrailingslashit(home_url('/')), '?p=1</code> instead of <code>', home_url('?p=1'), '</code>';
+    $site = parse_url(home_url('/'));
     if ($site['path'] != '/') {
         echo '<br />Take care with this setting to ensure it will not cause multiple redirects for your site.';
     }
@@ -366,8 +377,8 @@ function miqro_shortlink_protocol_option_html() {
     } else {
         $s2 = "checked='checked'";
     }
-    echo "<label><input name='miqro_shortlinks[protocol]' type='radio' value='0' $s0 /> HTTP and HTML Headers (default)</label>";
-    echo "<br /><label><input name='miqro_shortlinks[protocol]' type='radio' value='1' $s1 /> HTTP Only</label>";
+    echo "<label><input name='miqro_shortlinks[protocol]' type='radio' value='0' $s0 /> HTTP and HTML Headers <em>(default)</em></label>";
+    echo "<br /><label><input name='miqro_shortlinks[protocol]' type='radio' value='1' $s1 /> HTTP Only <em>(not compatible with WP Super Cache)</em></label>";
     echo "<br /><label><input name='miqro_shortlinks[protocol]' type='radio' value='2' $s2 /> HTML Only</label>";
 }
 
