@@ -19,6 +19,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+if (!function_exists('get_bloginfo')) {
+    header('HTTP/1.0 403 Forbidden');
+    exit("Not allowed to run this file directly.");
+}
+
 if (WP_UNINSTALL_PLUGIN != plugin_basename(dirname(__FILE__).'/shortlinks.php')
  or !current_user_can('activate_plugins')) {
 

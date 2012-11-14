@@ -71,9 +71,9 @@ The template tag is customizable.
 == Changelog ==
 
 = 1.6.1 =
-* Beta compatibility, ...
+* Minor updates, ...
 * Cosmetic improvements on the settings page.
-* WordPress 3.5-beta2 tested.
+* WordPress 3.5-beta3 tested.
 
 = 1.6 =
 * New features, released 3 November 2012.
