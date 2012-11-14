@@ -42,22 +42,35 @@ Settings will be preserved during deactivation.  An "uninstall" script is includ
 
 = Can I see a sample of your short url for wordpress? =
 
-Yes.  You can see this plugin live at my friend's blog.  For example:
+Yes.  You can see this plugin live on my personal blog.  For example:
 
-[http://blogyul.miqrogroove.com/?p=4517](http://blogyul.miqrogroove.com/?p=4517)
+[miqrogroove.com?p=788](http://miqrogroove.com?p=788)
 
-That link will forward to a specific attachment from a December 2009 article.  Here is an example of a category short link:
+That short link will forward to a specific post permalink from a September 2012 article.  Here is an example of a category short link:
 
-[http://blogyul.miqrogroove.com/?cat=331](http://blogyul.miqrogroove.com/?cat=331)
+[miqrogroove.com?cat=12](http://miqrogroove.com?cat=12)
 
 This plugin is also compatible with qTranslate, so you can see paths like /zh/?p=4517 when both plugins are installed.
+
+[http://blogyul.miqrogroove.com/zh/?p=4517](http://blogyul.miqrogroove.com/zh/?p=4517)
+
+Notice how much longer the permalinks may become when the short links are clicked!
 
 
 = Is it only the page or the post url that it shortens? =
 
 Short Links are extra URLs that get forwarded to the normal URLs.  The existing URLs stay the same.
 
-This does work for pages, posts, and categories, yes.  This particular plugin does not make short links for tags.
+This does work for:
+* Posts
+* Pages
+* Attachments
+* Categories
+
+This particular plugin does not make short links for:
+* Tags
+* Image files
+* Other websites
 
 
 = Does it take the header as the description? =
