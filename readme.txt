@@ -62,12 +62,14 @@ Notice how much longer the permalinks may become when the short links are clicke
 Short Links are extra URLs that get forwarded to the normal URLs.  The existing URLs stay the same.
 
 This does work for:
+
 * Posts
 * Pages
 * Attachments
 * Categories
 
 This particular plugin does not make short links for:
+
 * Tags
 * Image files
 * Other websites
