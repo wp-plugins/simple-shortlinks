@@ -19,6 +19,8 @@ The URLs are automatically added to the HTTP and HTML headers of each post, page
 
 A template tag enables you to display a human-readable link in addition to the automatically generated headers.  Use of human-readable links is highly encouraged, because Google is known to favor them and rank them higher than some longer URLs.  This has the effect of boosting the rank of URLs that were deemed "too long" by Google's standards.  Also, in many mobile web browsers, the easiest way for a visitor to find a short link is by seeing it somewhere on the page.
 
+The template tag idea can be extended further with CSS code for print media, which could ensure that each article's short link URL is printed along with the article.  This will make it much easier for the user to return to the article after reading a hard copy.
+
 Simple Short Links was designed to do this with no frills, and with an eye on eventually incorporating some or all of its basic functionality into the WordPress core. One benefit of the no-frills system is that you will never worry about the forwarding service itself, which is already built in to WordPress. This plugin simply reveals hidden short URLs that already work on your blog.
 
 One disadvantage of this bare-bone simplicity is there will be no short links for tags or external URLs.
@@ -170,3 +172,15 @@ A second, similar tag is now available in case you need to display a self-referr
 function the_single_shortlink($text = '', $title = '');
 `
 
+= The CSS Printing Trick =
+
+Try adding something like this to your theme's CSS file to make the URL for the short link appear when printed.
+
+`
+@media print {
+ .shortlink a:link:after {
+	content: " " attr(href);
+ }
+}
+`
+The CSS example assumes the_shortlink() is used inside of a DIV or P element with a class attribute called "shortlink".
