@@ -2,7 +2,7 @@
 Contributors: miqrogroove
 Tags: shortlinks, shortlink, short, links, link, url, tiny, micro, shortening, shortener
 Requires at least: 3.0
-Tested up to: 3.5
+Tested up to: 3.6
 Stable tag: 1.6.1
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
@@ -46,7 +46,7 @@ Settings will be preserved during deactivation.  An "uninstall" script is includ
 
 Yes.  You can see this plugin live on my personal blog.  For example:
 
-[miqrogroove.com?p=788](http://miqrogroove.com?p=788)
+[miqrogroove.com?p=1122](http://miqrogroove.com?p=1122)
 
 That short link will forward to a specific post permalink from a September 2012 article.  Here is an example of a category short link:
 
@@ -91,6 +91,7 @@ The template tag is customizable.
 * Minor updates, released 23 November 2012.
 * Cosmetic improvements on the settings page.
 * WordPress 3.5-RC1 tested.
+* WordPress 3.6 tested 7 August 2013.
 
 = 1.6 =
 * New features, released 3 November 2012.
