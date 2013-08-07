@@ -2,7 +2,7 @@
 Contributors: miqrogroove
 Tags: shortlinks, shortlink, short, links, link, url, tiny, micro, shortening, shortener
 Requires at least: 3.0
-Tested up to: 3.5
+Tested up to: 3.6
 Stable tag: 1.6.1
 
 Automatically advertise shortlinks on your blog's domain using WordPress native ID forwarding.
@@ -18,6 +18,8 @@ These can be useful for micro-blogging, and they allow you to use your own domai
 The URLs are automatically added to the HTTP and HTML headers of each post, page, attachment, and category.
 
 A template tag enables you to display a human-readable link in addition to the automatically generated headers.  Use of human-readable links is highly encouraged, because Google is known to favor them and rank them higher than some longer URLs.  This has the effect of boosting the rank of URLs that were deemed "too long" by Google's standards.  Also, in many mobile web browsers, the easiest way for a visitor to find a short link is by seeing it somewhere on the page.
+
+The template tag idea can be extended further with CSS code for print media, which could ensure that each article's short link URL is printed along with the article.  This will make it much easier for the user to return to the article after reading a hard copy.
 
 Simple Short Links was designed to do this with no frills, and with an eye on eventually incorporating some or all of its basic functionality into the WordPress core. One benefit of the no-frills system is that you will never worry about the forwarding service itself, which is already built in to WordPress. This plugin simply reveals hidden short URLs that already work on your blog.
 
@@ -44,7 +46,7 @@ Settings will be preserved during deactivation.  An "uninstall" script is includ
 
 Yes.  You can see this plugin live on my personal blog.  For example:
 
-[miqrogroove.com?p=788](http://miqrogroove.com?p=788)
+[miqrogroove.com?p=1122](http://miqrogroove.com?p=1122)
 
 That short link will forward to a specific post permalink from a September 2012 article.  Here is an example of a category short link:
 
@@ -62,12 +64,14 @@ Notice how much longer the permalinks may become when the short links are clicke
 Short Links are extra URLs that get forwarded to the normal URLs.  The existing URLs stay the same.
 
 This does work for:
+
 * Posts
 * Pages
 * Attachments
 * Categories
 
 This particular plugin does not make short links for:
+
 * Tags
 * Image files
 * Other websites
@@ -87,6 +91,7 @@ The template tag is customizable.
 * Minor updates, released 23 November 2012.
 * Cosmetic improvements on the settings page.
 * WordPress 3.5-RC1 tested.
+* WordPress 3.6 tested 7 August 2013.
 
 = 1.6 =
 * New features, released 3 November 2012.
@@ -168,3 +173,15 @@ A second, similar tag is now available in case you need to display a self-referr
 function the_single_shortlink($text = '', $title = '');
 `
 
+= The CSS Printing Trick =
+
+Try adding something like this to your theme's CSS file to make the URL for the short link appear when printed.
+
+`
+@media print {
+ .shortlink a:link:after {
+	content: " " attr(href);
+ }
+}
+`
+The CSS example assumes the_shortlink() is used inside of a DIV or P element with a class attribute called "shortlink".
